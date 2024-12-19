@@ -128,3 +128,78 @@ $$
 
 ### Lipscheitz Convex Functions: $\mathcal{O}(1/\varepsilon^2)$ steps
 
+> 令函数 $f: \mathbf{dom}(f) \to \mathbb{R}^m$ 是可导的，$X \subseteq \mathbf{dom}(f)$ 是一个convex set，$B\in \mathbb{R}^+$。如果 $X$ 是非空且是 open的，则下列两个陈述时等价的：
+>
+> 1. $f$ 是 B-Lipschitz 意味着 $||f(\mathbf{x_1}) - f(\mathbf{x_2})|| \leq B ||\mathbf{x_1} - \mathbf{x_2}||, \forall \mathbf{x_1}, \mathbf{x_2} \in X$
+> 2. $f$ 是可导的且被bounded by $B$ (in spectral norm),意味着 $||Df(\mathbf{x})||\leq B, \forall \mathbf{x} \in X$
+
+假设 $|| \mathbf{x}_0 - \mathbf{x}^* || \leq R, ||\nabla f(\mathbf{x})|| \leq B$，选择stepsize 为
+$$
+\eta := \frac{R}{B\sqrt{T}}
+$$
+因此有 
+$$
+\begin{align*}
+\frac{1}{T}\sum^{T-1}_{t=0}
+(f(\mathbf{x}_t) - f(\mathbf{x}^*))
+&\leq
+\frac{1}{T}\sum^{T-1}_{t=0} || \mathbf{x}_0 - \mathbf{x}^* ||\nabla f(\mathbf{x})
+\\
+&=\frac{1}{T}\sum^{T-1}_{t=0} RB
+\\
+&\leq \frac{RB}{\sqrt{T}}
+\end{align*}
+$$
+
+> Pf (2):
+> $$
+> \begin{align*}
+> \sum^{T-1}_{t=0}
+> \left [ f(\mathbf{x}_t) - f(\mathbf{x}^*) \right]
+> &\leq 
+> \frac{\eta}{2}\sum^{T-1}_{t=0}|| g_t ||^2 +
+> \frac{1}{2\eta}
+> || \mathbf{x}_0 - \mathbf{x}^* ||^2
+> 
+> \\
+> &\leq \frac{\eta}{2}B^2T + \frac{1}{2\eta} R^2
+> \end{align*}
+> $$
+> 因此选择 $\eta$ 使的右式最小，即：
+> $$
+> q(\eta) = \frac{\eta}{2}B^2T + \frac{1}{2\eta} R^2
+> $$
+> 求导，可得
+> $$
+> q(R/(B\sqrt{T})) = RB\sqrt{T}
+> $$
+> QED
+
+为使得 $\min^{T-1}_{t=0} \left [ f(\mathbf{x}_t) - f(\mathbf{x}^*) \right] \leq \varepsilon$, 需要
+$$
+T \geq \frac{R^2 B^2}{\varepsilon^2}
+$$
+次迭代。这个结果并不好，考虑误差要求很低，但是 R 和 B 可能是很大的数。
+
+需要注意这里并没有对维度的依赖（尽管 R B 可能会有）。
+
+如果我们不知道 R 和/或 B，该怎么办？一种方法是 “猜测 ”R 和 B，用猜测得到的 $T$ 和 $\eta$ 运行梯度下降，检查结果的绝对误差是否最大为 $\varepsilon$，否则换一个猜测重复。然而，这样做是失败的，因为为了计算绝对误差，我们需要知道 $f(\mathbf{x}^*)$，而我们通常不知道 $f(\mathbf{x}^*)$。但是练习 16 要求你证明知道 R 就足够了。
+
+
+
+### Smooth Convex Functions: $\mathcal{O}(1/\varepsilon)$ steps
+
+考虑一阶导性质：
+$$
+f(\mathbf{x}_2) \geq f(\mathbf{x}_1) + \nabla f(\mathbf{x}_1)^\top(\mathbf{x}_2 - \mathbf{x}_1)
+$$
+我们可以认为 $f(\mathbf{x}_2)$ be bounded from above. 因此对于所有可导函数，有：
+
+如果区间 $X\subset \mathbf{dom}(f)$ 是convex 且 $L \in \mathbb{R}^+$,  $f$ 是 smooth (with param $L$) over $X$ 如果
+$$
+f(\mathbf{y}) \geq f(\mathbf{x}) + \nabla f(\mathbf{x}) ^\top (\mathbf{y}-\mathbf{x}) + \frac{L}{2} || \mathbf{x} - \mathbf{y}||^2, \quad \forall\mathbf{x}, \mathbf{y} \in X
+$$
+如果 $X = \mathbf{dom}(f)$, $f$ 被称呼为 smooth
+
+<img src="./img/Chapter 2/image-20241219212745015.png" alt="image-20241219212745015" style="width:50%;" />
+
