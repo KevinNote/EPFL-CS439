@@ -1,4 +1,4 @@
-# Chatpter 1
+# Chatpter 1: Theory of Convex Functions
 
 Cauchy-Schwarz Inequality
 $$
